@@ -1,57 +1,73 @@
-﻿using Backend.dtos;
+﻿using Backend.Data;
+using Backend.dtos;
+using Backend.Entities;
+using Backend.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend;
 
 public static class FlightsEndpoints
 {
     const string GetFlightEndpointName = "GetFlight";
-    static readonly List<FlightDto> flights = [new(1, new(1,"Beograd"), new(4,"Pristina"), new DateOnly(2024, 3, 24), 0, 42)];
-
-    public static RouteGroupBuilder MapFlightsEndpoints(this WebApplication app)
+    public static  RouteGroupBuilder MapFlightsEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("flights").WithParameterValidation();
         //GET /flights
-        group.MapGet("/", () => flights);
+        group.MapGet("/", async (FlightSystemContext dbContext) => await dbContext.Flights.
+        Include(fligh => fligh.DepartureCity).
+        Include(flight => flight.ArrivalCity).
+        Select(flight => flight.toDto()).
+        AsNoTracking().ToListAsync());
 
         //GET /flights
-        group.MapGet("/{id}", (int id) =>
+        group.MapGet("/{id}", async (int id, FlightSystemContext dbContext) =>
         {
-            FlightDto? flight = flights.Find(flight => flight.flightId == id);
-            return flight is null ? Results.NotFound() : Results.Ok(flight);
+            Flight? flight = await dbContext.Flights.FindAsync(id);
+            if (flight is not null)
+            {
+                flight.DepartureCity = await dbContext.Cities.FindAsync(flight.DepartureCityID);
+                flight.ArrivalCity = await dbContext.Cities.FindAsync(flight.ArrivalCityID);
+            }
+            return flight is null ? Results.NotFound() : Results.Ok(flight.toDto());
+
         }).WithName(GetFlightEndpointName);
 
         //POST /flights
-        group.MapPost("/", (CreateFlightDto newFlight) =>
+        group.MapPost("/", async (CreateFlightDto newFlight, FlightSystemContext dbContext) =>
         {
-            FlightDto flight = new(
-                flights.Count + 1,
-                newFlight.departure,
-                newFlight.arrival,
-                newFlight.departureDate,
-                newFlight.numberOfConnections,
-                newFlight.availableSeatsCount
-            );
-            flights.Add(flight);
+            Flight flight = newFlight.ToEntitiy();
+            flight.DepartureCity = dbContext.Cities.Find(flight.DepartureCityID);
+            flight.ArrivalCity = dbContext.Cities.Find(flight.ArrivalCityID);
 
-            return Results.CreatedAtRoute(GetFlightEndpointName, new { id = flight.flightId }, flight);
+            await dbContext.Flights.AddAsync(flight);
+            await dbContext.SaveChangesAsync();
+
+            return Results.CreatedAtRoute(GetFlightEndpointName, new { id = flight.FlightId }, flight.toDto());
         });
-        
+
 
         //PUT /flights
-        group.MapPut("/{id}", (int id, UpdateFlightDto updatedFlight) =>
+        group.MapPut("/{id}", async (int id, UpdateFlightDto updatedFlight, FlightSystemContext dbContext) =>
         {
-            var index = flights.FindIndex(flight => flight.flightId == id);
-            if (index == -1) { return Results.NotFound(); }
-            flights[index] = new FlightDto(id, updatedFlight.departure, updatedFlight.arrival, updatedFlight.departureDate, updatedFlight.numberOfConnections, updatedFlight.availableSeatsCount);
+            var existingFlight = await dbContext.Flights.FindAsync(id);
+            if (existingFlight is null) { return Results.NotFound(); }
+
+            dbContext.Entry(existingFlight).CurrentValues.SetValues(updatedFlight.ToEntitiy(id));
+            await dbContext.SaveChangesAsync();
 
             return Results.NoContent();
         });
-    
+
 
         //DELETE /flights
-        group.MapDelete("/{id}", (int id) =>
+        group.MapDelete("/{id}", async (int id, FlightSystemContext dbContext) =>
         {
-            flights.RemoveAll(flight => flight.flightId == id);
+            await dbContext.Flights.
+            Where(game => game.FlightId == id).
+            ExecuteDeleteAsync();
+            
+            await dbContext.SaveChangesAsync();
+
             return Results.NoContent();
         });
 

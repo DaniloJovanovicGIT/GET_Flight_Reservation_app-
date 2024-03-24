@@ -1,47 +1,37 @@
 GET http://localhost:5278/cities
 
 ###
-GET http://localhost:5278/cities/2
+GET http://localhost:5278/cities/3
 
 ###
 GET http://localhost:5278/flights
+
+###
+GET http://localhost:5278/flights/7
 
 ###
 POST http://localhost:5278/flights
 Content-Type: application/json
 
 {
-    "departure": {
-      "id": 1,
-      "name": "Beograd"
-    },
-    "arrival": {
-      "id": 3,
-      "name": "Kraljevo"
-    },
-    "departureDate": "2024-03-25",
-    "numberOfConnections": 0,
-    "availableSeatsCount": 16
+    "DepartureCityId": 3,
+    "ArrivalCityId":1,
+    "departureDate": "2024-05-26",
+    "numberOfConnections": 2,
+    "availableSeatsCount": 12
   }
 
 ###
-PUT http://localhost:5278/flights/2
+PUT http://localhost:5278/flights/7
 Content-Type: application/json
 
 {
-    "flightId": 2,
-    "departure": {
-      "id": 1,
-      "name": "Beograd"
-    },
-    "arrival": {
-      "id": 3,
-      "name": "Kraljevo"
-    },
+    "departureCityId": 3,
+    "arrivalCityId": 1,
     "departureDate": "2024-03-25",
     "numberOfConnections": 0,
     "availableSeatsCount": 12
   }
 
 ###
-  DELETE http://localhost:5278/flights/2
+  DELETE http://localhost:5278/flights/5

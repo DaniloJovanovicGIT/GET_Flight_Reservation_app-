@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {}
+    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {
+    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\Danilo\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\obj\\",
+        "outputPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Danilo\\AppData\\Roaming\\NuGet\\NuGet.Config"
