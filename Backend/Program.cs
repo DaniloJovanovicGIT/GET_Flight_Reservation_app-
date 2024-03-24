@@ -1,6 +1,18 @@
+using Backend;
+using Backend.Data;
+using Backend.dtos;
+using Backend.Endpoints;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connString = builder.Configuration.GetConnectionString("FlightSystem");
+builder.Services.AddSqlite<FlightSystemContext>(connString);
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.MapFlightsEndpoints();
+app.MapCitiesEndpoints();
+
+app.MigrateDb();
 
 app.Run();

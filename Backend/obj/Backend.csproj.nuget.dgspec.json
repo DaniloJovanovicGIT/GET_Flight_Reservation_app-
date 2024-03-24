@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {}
+    "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {
+    "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
+        "projectUniqueName": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
+        "projectPath": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\Danilo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\obj\\",
+        "outputPath": "c:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Danilo\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -42,6 +42,22 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "MinimalApis.Extensions": {
+              "target": "Package",
+              "version": "[0.11.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
