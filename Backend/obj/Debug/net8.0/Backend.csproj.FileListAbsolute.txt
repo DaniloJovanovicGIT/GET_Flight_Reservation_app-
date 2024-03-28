@@ -126,3 +126,11 @@ C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\System.Web.Cors.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

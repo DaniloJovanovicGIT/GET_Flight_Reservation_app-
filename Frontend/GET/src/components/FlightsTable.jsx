@@ -26,18 +26,16 @@ function FlightPage() {
 
   return (
     <>
-      <h1>AddFlightPage</h1>
-      <Button>Lets do this</Button>
       <Table>
         <TableCaption>A list of flights.</TableCaption>
         <TableHeader>
-          <TableRow>
-            <TableHead>Flight ID</TableHead>
-            <TableHead>Departure</TableHead>
-            <TableHead>Arrival</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Connections</TableHead>
-            <TableHead>Available seats</TableHead>
+          <TableRow >
+            <TableHead className="text-center">Flight ID</TableHead>
+            <TableHead className="text-center">Departure</TableHead>
+            <TableHead className="text-center">Arrival</TableHead>
+            <TableHead className="text-center">Date</TableHead>
+            <TableHead className="text-center">Connections</TableHead>
+            <TableHead className="text-center">Available seats</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

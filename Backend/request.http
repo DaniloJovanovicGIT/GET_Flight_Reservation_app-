@@ -1,16 +1,27 @@
 GET http://localhost:5278/cities
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzExNTYzNjM5LCJleHAiOjE3MTE1NjcyMzksImlhdCI6MTcxMTU2MzYzOX0.-LuQfEXU8dorW1kXblK9coqqkcR5J_NiW6gRyr7qfqs
+
+
 
 ###
 GET http://localhost:5278/cities/3
 
+
+
 ###
 GET http://localhost:5278/flights
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzExNjI2MjUyLCJleHAiOjE3MTE2Mjk4NTIsImlhdCI6MTcxMTYyNjI1MiwiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.aXxpiI5cuaVh_ErPZuUCMwFDPdpTRIisFo-NLm0zYKs
+
+
 
 ###
 GET http://localhost:5278/flights/7
 
+
+
 ###
 POST http://localhost:5278/flights
+Authorization: Bearer 
 Content-Type: application/json
 
 {
@@ -34,4 +45,13 @@ Content-Type: application/json
   }
 
 ###
-  DELETE http://localhost:5278/flights/5
+DELETE http://localhost:5278/flights/5
+
+###
+POST http://localhost:5278/login
+Content-Type: application/json
+
+{
+    "Username": "admin",
+    "Password": "admin"
+  }

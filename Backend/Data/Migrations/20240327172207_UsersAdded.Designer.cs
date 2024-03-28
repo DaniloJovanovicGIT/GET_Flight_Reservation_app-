@@ -3,6 +3,7 @@ using System;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Data.Migrations
 {
     [DbContext(typeof(FlightSystemContext))]
-    partial class FlightSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240327172207_UsersAdded")]
+    partial class UsersAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -75,64 +78,13 @@ namespace Backend.Data.Migrations
                     b.Property<int>("NumberOfConnections")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("FlightId");
 
                     b.HasIndex("ArrivalCityID");
 
                     b.HasIndex("DepartureCityID");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Flights");
-                });
-
-            modelBuilder.Entity("Backend.Entities.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            Password = "admin",
-                            Role = "admin",
-                            Username = "admin"
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            Password = "agent",
-                            Role = "agent",
-                            Username = "agent"
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            Password = "visitor",
-                            Role = "visitor",
-                            Username = "visitor"
-                        });
                 });
 
             modelBuilder.Entity("Backend.Entities.Flight", b =>
@@ -149,18 +101,9 @@ namespace Backend.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Entities.User", null)
-                        .WithMany("Flights")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("ArrivalCity");
 
                     b.Navigation("DepartureCity");
-                });
-
-            modelBuilder.Entity("Backend.Entities.User", b =>
-                {
-                    b.Navigation("Flights");
                 });
 #pragma warning restore 612, 618
         }
