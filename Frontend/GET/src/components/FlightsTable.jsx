@@ -29,8 +29,7 @@ function FlightPage() {
       <Table>
         <TableCaption>A list of flights.</TableCaption>
         <TableHeader>
-          <TableRow >
-            <TableHead className="text-center">Flight ID</TableHead>
+          <TableRow>
             <TableHead className="text-center">Departure</TableHead>
             <TableHead className="text-center">Arrival</TableHead>
             <TableHead className="text-center">Date</TableHead>
@@ -41,12 +40,15 @@ function FlightPage() {
         <TableBody>
           {flights.map((flight) => (
             <TableRow key={flight.flightId}>
-              <TableCell>{flight.flightId}</TableCell>
               <TableCell>{flight.departure.name}</TableCell>
               <TableCell>{flight.arrival.name}</TableCell>
               <TableCell>{flight.departureDate}</TableCell>
               <TableCell>{flight.numberOfConnections}</TableCell>
-              <TableCell>{flight.availableSeatsCount}</TableCell>
+              <TableCell
+                className={flight.availableSeatsCount < 5 ? "bg-red-500" : ""}
+              >
+                {flight.availableSeatsCount}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
