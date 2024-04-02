@@ -134,3 +134,5 @@ C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\Backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Danilo\Desktop\GET\GET_Flight_Reservation_app-\Backend\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

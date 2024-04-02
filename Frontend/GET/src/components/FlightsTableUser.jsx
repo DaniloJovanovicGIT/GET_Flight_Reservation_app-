@@ -1,5 +1,4 @@
 import useFlights from "@/hooks/useFlights";
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,22 +9,51 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import Popup from "./ui/popup";
+import { useError } from "@/context/ErrorContext";
+import useAddReservation from "@/hooks/useAddReservation";
 
 function FlightsTableUser() {
   const [numSeats, setNumSeats] = useState(1);
   const { flights, loading, error } = useFlights();
-  const [selectedFlightId, setSelectedFlightId] = useState(null);
+  const [selectedFlight, setSelectedFlight] = useState(null);
+  const { addError } = useError();
+  const { addReservation } = useAddReservation();
 
-  const handleFlightSelection = (flightId) => {
-    setSelectedFlightId(flightId);
+  const handleFlightSelection = (flight) => {
+    setSelectedFlight(flight);
   };
 
-  const handleClosePopup = () =>{
-    setSelectedFlightId(null)
-    setNumSeats(1)
-  }
+  const handleClosePopup = () => {
+    setSelectedFlight(null);
+    setNumSeats(1);
+  };
+
+  const handleConfirmBooking = () => {
+    if (numSeats <= 0) {
+      addError("Please select at least 1 seat.");
+      return;
+    }
+
+    if (numSeats > selectedFlight.availableSeatsCount) {
+      addError("Number of selected seats exceeds available seats.");
+      return;
+    }
+
+    const departureDate = new Date(selectedFlight.departureDate);
+    const currentTime = new Date();
+    const timeDifference = departureDate.getTime() - currentTime.getTime();
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+    if (daysDifference < 3) {
+      addError("Selected flight departs in less than 3 days. Cannot book.");
+      return;
+    }
+
+    addReservation(selectedFlight.flightId, numSeats);
+    setSelectedFlight(null);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -34,16 +62,6 @@ function FlightsTableUser() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  console.log(flights);
-
-  const handleConfirmBooking = () => {
-    if(numSeats>flights[selectedFlightId].availableSeatsCount){
-      
-    }
-    console.log("Booking", numSeats, "seats");
-    setSelectedFlightId(null)
-  };
 
   return (
     <>
@@ -57,7 +75,6 @@ function FlightsTableUser() {
             <TableHead className="text-center">Connections</TableHead>
             <TableHead className="text-center">Available seats</TableHead>
             <TableHead className="text-center">Actions</TableHead>{" "}
-            {/* New column for actions */}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -69,7 +86,7 @@ function FlightsTableUser() {
               <TableCell>{flight.numberOfConnections}</TableCell>
               <TableCell>{flight.availableSeatsCount}</TableCell>
               <TableCell>
-                <Button onClick={() => handleFlightSelection(flight.flightId)}>
+                <Button onClick={() => handleFlightSelection(flight)}>
                   Book
                 </Button>
               </TableCell>
@@ -77,17 +94,19 @@ function FlightsTableUser() {
           ))}
         </TableBody>
       </Table>
-      {selectedFlightId && (
+      {selectedFlight && (
         <Popup onClose={() => handleClosePopup()}>
-          <h2>Booking for Flight {`${flights[selectedFlightId].departure.name} - ${flights[selectedFlightId].arrival.name}`}</h2>
-          <h2>Select Number of Seats</h2>
+          <h2>Booking for flight: </h2>
+          <div className="flight">{`FlightId: ${selectedFlight.flightId}, From:${selectedFlight.departure.name} To:${selectedFlight.arrival.name} Date:${selectedFlight.departureDate}`}</div>
+          <p>Select Number of Seats:</p>
+
           <input
             type="number"
             value={numSeats}
             onChange={(e) => setNumSeats(parseInt(e.target.value))}
             min={1}
           />
-          <button onClick={handleConfirmBooking}>Confirm Booking</button>
+          <Button onClick={handleConfirmBooking}>Confirm Booking</Button>
         </Popup>
       )}
     </>

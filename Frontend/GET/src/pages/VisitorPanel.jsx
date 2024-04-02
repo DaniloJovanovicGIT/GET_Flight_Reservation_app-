@@ -3,6 +3,7 @@ import Navigation from '@/components/Navigation'
 import FlightsTableUser from '@/components/FlightsTableUser'
 
 function VisitorPanel() {
+
   return (
     <>
     <Navigation/>

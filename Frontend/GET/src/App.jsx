@@ -9,26 +9,35 @@ import VisitorPanel from "./pages/VisitorPanel";
 import AgentPanel from "./pages/AgentPanel";
 import MissingPage from "./pages/MissingPage";
 import RequireRole from "./components/RequireRole";
+import ErrorPopup from "./components/ErrorPopup";
+import { useError } from "./context/ErrorContext";
+
 
 function App() {
+  
+
+
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="unathorized" element={<UnathorizedPage />} />
-        <Route element={<RequireRole allowedRole="admin"/>}>
-          <Route path="adminPanel" element={<AdminPanel />} />
-        </Route>
-        <Route element={<RequireRole allowedRole="visitor"/>}>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="unathorized" element={<UnathorizedPage />} />
+          <Route element={<RequireRole allowedRole="admin" />}>
+            <Route path="adminPanel" element={<AdminPanel />} />
+          </Route>
+          <Route element={<RequireRole allowedRole="visitor" />}>
             <Route path="visitorPanel" element={<VisitorPanel />} />
-        </Route>
-        <Route element={<RequireRole allowedRole="agent"/>}>
+          </Route>
+          <Route element={<RequireRole allowedRole="agent" />}>
             <Route path="agentPanel" element={<AgentPanel />} />
-        </Route>
+          </Route>
           {/*Catch all*/}
           <Route path="*" element={<MissingPage />} />
         </Route>
-    </Routes>
+      </Routes>
+      {<ErrorPopup />}
+    </>
   );
 }
 

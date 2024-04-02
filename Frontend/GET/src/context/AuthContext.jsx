@@ -1,27 +1,26 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Create AuthContext
 const AuthContext = createContext();
 
-// Custom hook to use AuthContext
 export const useAuth = () => useContext(AuthContext);
 
-// AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [authState, setAuthState] = useState({
-    token: null,
-    username: null,
-    role: null,
+  const [authState, setAuthState] = useState(() => {
+    const storedAuthState = sessionStorage.getItem("authState");
+    return storedAuthState
+      ? JSON.parse(storedAuthState)
+      : { token: null, userId: null, username: null, role: null };
   });
 
-  // Function to set authentication state
-  const login = (token, username, role) => {
-    setAuthState({ token, username, role });
+  const login = (token, userId, username, role) => {
+    const newAuthState = { token, userId, username, role };
+    setAuthState(newAuthState);
+    sessionStorage.setItem("authState", JSON.stringify(newAuthState));
   };
 
-  // Function to clear authentication state
   const logout = () => {
-    setAuthState({ token: null, username: null, role: null });
+    setAuthState({ token: null, userId: null, username: null, role: null });
+    sessionStorage.removeItem("authState");
   };
 
   return (
@@ -30,4 +29,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-  

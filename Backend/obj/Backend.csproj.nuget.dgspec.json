@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj": {}
+    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj": {
+    "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\Backend.csproj",
+        "projectPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\Danilo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\backend\\obj\\",
+        "outputPath": "C:\\Users\\Danilo\\Desktop\\GET\\GET_Flight_Reservation_app-\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Danilo\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -50,6 +50,10 @@
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.3, )"
+            },
+            "Microsoft.AspNetCore.SignalR": {
+              "target": "Package",
+              "version": "[1.1.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",

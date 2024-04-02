@@ -25,7 +25,7 @@ namespace Backend.Endpoints
                     }
 
                     var token = GenerateJwtToken(user);
-                    return Results.Ok(new { Token = token, Username = user.Username, Role = user.Role });
+                    return Results.Ok(new { Token = token, UserId = user.UserId, Username = user.Username, Role = user.Role });
                 });
         }
 

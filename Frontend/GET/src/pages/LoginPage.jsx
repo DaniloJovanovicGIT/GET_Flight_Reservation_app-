@@ -28,9 +28,9 @@ function LoginPage() {
   };
 
   const handleLoginResponse = (response, login) => {
-    const { token, username, role } = response.data; 
-    login(token, username, role); 
-    console.log(`${token}#${username} ${role}`)
+    console.log(response.data)
+    const { token, userId, username, role } = response.data; 
+    login(token, userId, username, role); 
     navigate(`${role}Panel`)
   };
 

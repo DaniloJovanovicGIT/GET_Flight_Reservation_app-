@@ -13,6 +13,10 @@ builder.Services.AddCors();
 //BAZA
 var connString = builder.Configuration.GetConnectionString("FlightSystem");
 builder.Services.AddSqlite<FlightSystemContext>(connString);
+
+//SIGNALR
+builder.Services.AddSignalR();
+
 //AUTH
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -35,6 +39,7 @@ app.UseCors(builder =>
            .AllowAnyMethod()
            .AllowAnyHeader()
 );
+
 //ENPOINT
 app.MapAuthEndpoints();
 app.MapFlightsEndpoints().RequireAuthorization();
