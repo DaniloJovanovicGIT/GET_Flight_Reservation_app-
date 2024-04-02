@@ -8,16 +8,25 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//CORS
-builder.Services.AddCors();
-//BAZA
+//ADD CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
+});
+//ADD BAZA
 var connString = builder.Configuration.GetConnectionString("FlightSystem");
 builder.Services.AddSqlite<FlightSystemContext>(connString);
 
-//SIGNALR
+//ADD SIGNALR
 builder.Services.AddSignalR();
 
-//AUTH
+//ADD AUTH
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -32,13 +41,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
-//CORS POLICY
+//BUILD
 var app = builder.Build();
-app.UseCors(builder => 
-    builder.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader()
-);
+//CORS POLICY
+
+app.UseCors("AllowFrontend");
+
+//MIDDLE SIGNAL R
+app.MapHub<ReservationHub>("/reservationhub");
 
 //ENPOINT
 app.MapAuthEndpoints();

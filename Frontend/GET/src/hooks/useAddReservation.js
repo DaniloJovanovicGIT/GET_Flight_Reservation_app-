@@ -1,23 +1,40 @@
 import { useState, useEffect } from "react";
+import * as signalR from "@microsoft/signalr";
 import { useError } from "@/context/ErrorContext";
 import { useAuth } from "@/context/AuthContext";
-import useSignalRHub from "@/hooks/useSignalRHub";
 
 const useAddReservation = () => {
   const [errorText, setErrorText] = useState("");
   const { addError } = useError();
   const { authState } = useAuth();
-
-  const { connection, hubUrl } = useSignalRHub();
+  const [connection, setConnection] = useState(null);
 
   useEffect(() => {
-    if (connection) {
-      // Start the SignalR connection
-      connection.start().catch((error) => {
+    const newConnection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5278/reservationhub")
+      .withAutomaticReconnect()
+      .build();
+
+    newConnection
+      .start()
+      .then(() => {
+        console.log("SignalR Connected");
+        setConnection(newConnection);
+      })
+      .catch((error) => {
         console.error("Error establishing SignalR connection:", error);
       });
-    }
-  }, [connection]);
+
+    return () => {
+      if (newConnection) {
+        newConnection.stop().then(() => {
+          console.log("SignalR Connection Stopped");
+        }).catch((error) => {
+          console.error("Error stopping SignalR connection:", error);
+        });
+      }
+    };
+  }, []);
 
   const addReservation = async (flightId, numSeats) => {
     try {
@@ -31,7 +48,6 @@ const useAddReservation = () => {
         userId: authState.userId,
       };
 
-      // Emit a SignalR event to add reservation
       await connection.invoke("AddReservation", reservationData);
 
       console.log("Reservation added successfully");
@@ -42,7 +58,7 @@ const useAddReservation = () => {
     }
   };
 
-  return { errorText, addReservation, hubUrl };
+  return { errorText, addReservation };
 };
 
 export default useAddReservation;

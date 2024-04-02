@@ -1,12 +1,10 @@
-import { useLocation, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { Outlet } from "react-router-dom";
 
 const RequireAuth = ({ allowedRole }) => {
   const { authState } = useAuth();
-  const { token, username, role } = authState;
-  console.log(role);
-  console.log(allowedRole);
+  const { role } = authState;
   return allowedRole == role ? (
     <Outlet />
   ) : (

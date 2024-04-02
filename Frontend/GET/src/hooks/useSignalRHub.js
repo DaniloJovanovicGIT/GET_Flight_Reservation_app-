@@ -18,7 +18,7 @@ const useSignalRHub = (hubLocation) => {
       .catch((err) => console.error(err));
 
     return () => {
-      if (newConnection) { // Access newConnection instead of connection
+      if (newConnection) {
         newConnection.stop();
       }
     };
