@@ -25,27 +25,31 @@ const useAddReservation = () => {
         console.error("Error establishing SignalR connection:", error);
       });
 
-      return () => {
-        if (newConnection) {
-          newConnection.stop().then(() => {
+    return () => {
+      if (newConnection) {
+        newConnection
+          .stop()
+          .then(() => {
             console.log("SignalR Connection Stopped");
-          }).catch((error) => {
+          })
+          .catch((error) => {
             console.error("Error stopping SignalR connection:", error);
           });
-        }
-      };
+      }
+    };
   }, []);
 
-  const addReservation = async (flightId, numSeats) => {
+  const addReservation = async (flightId, numSeats, currentTime) => {
     try {
       if (!connection) {
         throw new Error("SignalR connection is not established");
       }
 
       const reservationData = {
-        flightId: flightId,
-        numSeats: numSeats,
-        userId: authState.userId,
+        FlightID: flightId,
+        BookerId: authState.userId,
+        NumSeats: numSeats,
+        timeSubmited: currentTime,
       };
 
       await connection.invoke("AddReservation", reservationData);

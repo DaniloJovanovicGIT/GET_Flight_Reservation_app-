@@ -3,6 +3,7 @@ using System;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Data.Migrations
 {
     [DbContext(typeof(FlightSystemContext))]
-    partial class FlightSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20240403163125_change_reservations")]
+    partial class change_reservations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
@@ -104,9 +107,6 @@ namespace Backend.Data.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("numOfSeats")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("timeSubmited")
                         .HasColumnType("TEXT");
@@ -240,13 +240,13 @@ namespace Backend.Data.Migrations
                     b.HasOne("Backend.Entities.User", "Booker")
                         .WithMany()
                         .HasForeignKey("BookerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Backend.Entities.Flight", "Flight")
                         .WithMany()
                         .HasForeignKey("FlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Booker");

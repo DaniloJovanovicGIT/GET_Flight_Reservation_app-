@@ -14,12 +14,9 @@ namespace Backend.Entities
 
         public User? Booker { get; set; }
 
-        public int AgentId { get; set; }
-
-        public User? Agent { get; set; }
-
+        public int numOfSeats { get; set; }
         public string Status { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime timeSubmited { get; set; }
     }
 }

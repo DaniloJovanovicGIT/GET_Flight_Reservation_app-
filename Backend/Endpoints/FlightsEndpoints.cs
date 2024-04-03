@@ -9,15 +9,16 @@ namespace Backend;
 public static class FlightsEndpoints
 {
     const string GetFlightEndpointName = "GetFlight";
-    public static  RouteGroupBuilder MapFlightsEndpoints(this WebApplication app)
+    public static RouteGroupBuilder MapFlightsEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("flights").WithParameterValidation();
         //GET /flights
-        group.MapGet("/", async (FlightSystemContext dbContext) => await dbContext.Flights.
-        Include(fligh => fligh.DepartureCity).
-        Include(flight => flight.ArrivalCity).
-        Select(flight => flight.toDto()).
-        AsNoTracking().ToListAsync());
+        group.MapGet("/", async (FlightSystemContext dbContext) => await dbContext.Flights
+            .Include(flight => flight.DepartureCity)
+            .Include(flight => flight.ArrivalCity)
+            .Select(flight => flight.toDto())
+            .AsNoTracking()
+            .ToListAsync());
 
         //GET /flights
         group.MapGet("/{id}", async (int id, FlightSystemContext dbContext) =>
@@ -33,19 +34,44 @@ public static class FlightsEndpoints
         }).WithName(GetFlightEndpointName);
 
         //GET flights for agent
-        group.MapGet("/agent/{AgentID}", async (int AgentID, FlightSystemContext dbContext) => 
-    {
-        var agentFlights = await dbContext.Flights
-            .Include(flight => flight.DepartureCity)
-            .Include(flight => flight.ArrivalCity)
-            .Where(flight => flight.AgentID == AgentID)
-            .Select(flight => flight.toDto())
-            .AsNoTracking()
-            .ToListAsync();
-        
-        return Results.Ok(agentFlights);
-    });
+        group.MapGet("/agent/{AgentID}", async (int AgentID, FlightSystemContext dbContext) =>
+        {
+            var agentFlights = await dbContext.Flights
+                .Include(flight => flight.DepartureCity)
+                .Include(flight => flight.ArrivalCity)
+                .Where(flight => flight.AgentID == AgentID)
+                .Select(flight => flight.toDto())
+                .AsNoTracking()
+                .ToListAsync();
 
+            return Results.Ok(agentFlights);
+        });
+
+        // GET /flights/search/{departureCityId}/{arrivalCityId}/{directFlightsOnly}
+        group.MapGet("/search/{departureCityId}/{arrivalCityId}/{directFlightsOnly:int?}", async (FlightSystemContext dbContext, int? departureCityId, int? arrivalCityId, int? directFlightsOnly) =>
+        {
+            IQueryable<Flight> FlightsQuery = dbContext.Flights
+                .Include(flight => flight.DepartureCity)
+                .Include(flight => flight.ArrivalCity);
+
+            if (departureCityId.HasValue)
+            {
+                FlightsQuery = FlightsQuery.Where(flight => flight.DepartureCityID == departureCityId.Value);
+            }
+
+            if (arrivalCityId.HasValue)
+            {
+                FlightsQuery = FlightsQuery.Where(flight => flight.ArrivalCityID == arrivalCityId.Value);
+            }
+
+            if (directFlightsOnly.HasValue && directFlightsOnly == 1)
+            {
+                FlightsQuery = FlightsQuery.Where(flight => flight.NumberOfConnections == 0);
+            }
+
+            var flights = await FlightsQuery.ToListAsync();
+            return Results.Ok(flights);
+        });
 
         //POST /flights
         group.MapPost("/", async (CreateFlightDto newFlight, FlightSystemContext dbContext) =>
@@ -61,7 +87,6 @@ public static class FlightsEndpoints
             return Results.CreatedAtRoute(GetFlightEndpointName, new { id = flight.FlightId }, flight.toDto());
         });
 
-
         //PUT /flights
         group.MapPut("/{id}", async (int id, UpdateFlightDto updatedFlight, FlightSystemContext dbContext) =>
         {
@@ -74,14 +99,13 @@ public static class FlightsEndpoints
             return Results.NoContent();
         });
 
-
         //DELETE /flights
         group.MapDelete("/{id}", async (int id, FlightSystemContext dbContext) =>
         {
-            await dbContext.Flights.
-            Where(game => game.FlightId == id).
-            ExecuteDeleteAsync();
-            
+            await dbContext.Flights
+                .Where(flight => flight.FlightId == id)
+                .ExecuteDeleteAsync();
+
             await dbContext.SaveChangesAsync();
 
             return Results.NoContent();

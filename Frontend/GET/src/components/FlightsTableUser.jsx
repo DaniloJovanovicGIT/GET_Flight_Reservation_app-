@@ -1,4 +1,3 @@
-import useFlights from "@/hooks/useFlights";
 import {
   Table,
   TableBody,
@@ -14,9 +13,8 @@ import Popup from "./ui/popup";
 import { useError } from "@/context/ErrorContext";
 import useAddReservation from "@/hooks/useAddReservation";
 
-function FlightsTableUser() {
+function FlightsTableUser({ flights }) {
   const [numSeats, setNumSeats] = useState(1);
-  const { flights, loading, error } = useFlights();
   const [selectedFlight, setSelectedFlight] = useState(null);
   const { addError } = useError();
   const { addReservation } = useAddReservation();
@@ -51,17 +49,10 @@ function FlightsTableUser() {
       return;
     }
 
-    addReservation(selectedFlight.flightId, numSeats);
+    addReservation(selectedFlight.flightId, numSeats, currentTime);
     setSelectedFlight(null);
+    setNumSeats(1);
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   return (
     <>
@@ -80,8 +71,8 @@ function FlightsTableUser() {
         <TableBody>
           {flights.map((flight) => (
             <TableRow key={flight.flightId}>
-              <TableCell>{flight.departure.name}</TableCell>
-              <TableCell>{flight.arrival.name}</TableCell>
+              <TableCell>{flight.departureCity.name}</TableCell>
+              <TableCell>{flight.arrivalCity.name}</TableCell>
               <TableCell>{flight.departureDate}</TableCell>
               <TableCell>{flight.numberOfConnections}</TableCell>
               <TableCell>{flight.availableSeatsCount}</TableCell>
@@ -97,7 +88,7 @@ function FlightsTableUser() {
       {selectedFlight && (
         <Popup onClose={() => handleClosePopup()}>
           <h2>Booking for flight: </h2>
-          <div className="flight">{`FlightId: ${selectedFlight.flightId}, From:${selectedFlight.departure.name} To:${selectedFlight.arrival.name} Date:${selectedFlight.departureDate}`}</div>
+          <div className="flight">{`FlightId:${selectedFlight.flightId}, From:${selectedFlight.departureCity.name}, To:${selectedFlight.arrivalCity.name}, Date:${selectedFlight.departureDate}`}</div>
           <p>Select Number of Seats:</p>
 
           <input

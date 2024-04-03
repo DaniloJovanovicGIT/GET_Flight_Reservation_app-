@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Backend.Data
 {
     public class FlightSystemContext : DbContext
-    {
+    {  
+
         public DbSet<City> Cities => Set<City>();
         public DbSet<User> Users => Set<User>();
         public DbSet<Flight> Flights => Set<Flight>();
@@ -42,22 +43,17 @@ namespace Backend.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Agent)
-                .WithMany()
-                .HasForeignKey(r => r.AgentId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Booker)
                 .WithMany()
                 .HasForeignKey(r => r.BookerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Flight)
                 .WithMany()
                 .HasForeignKey(r => r.FlightId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }
