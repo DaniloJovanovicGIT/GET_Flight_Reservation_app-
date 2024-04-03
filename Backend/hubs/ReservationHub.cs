@@ -25,6 +25,21 @@ public class ReservationHub : Hub
         return await _context.Reservations.ToArrayAsync();
     }
 
+    public async Task<List<Reservation>> GetReservationsForAgent(int agentId)
+    {
+        var agentFlights = await _context.Flights
+            .Where(f => f.AgentID == agentId)
+            .ToListAsync();
+
+        var agentFlightIds = agentFlights.Select(f => f.FlightId).ToList();
+
+        var reservationsForAgent = await _context.Reservations
+            .Where(r => agentFlightIds.Contains(r.FlightId))
+            .ToListAsync();
+
+        return reservationsForAgent;
+    }
+
     public async Task<Reservation[]> GetReservationsByUserId(int userId)
     {
         return await _context.Reservations.Where(r => r.BookerId == userId).ToArrayAsync();

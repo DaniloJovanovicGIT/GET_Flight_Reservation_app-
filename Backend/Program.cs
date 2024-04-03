@@ -45,7 +45,8 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 //CORS POLICY
 
-app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontend"
+);
 
 //MIDDLE SIGNAL R
 app.MapHub<ReservationHub>("/reservationhub");

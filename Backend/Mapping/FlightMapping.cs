@@ -13,7 +13,8 @@ public static class FlightMapping
             ArrivalCityID = flight.ArrivalCityID,
             DepartureDate = flight.departureDate,
             NumberOfConnections = flight.numberOfConnections,
-            AvailableSeatsCount = flight.availableSeatsCount
+            AvailableSeatsCount = flight.availableSeatsCount,
+            AgentID = flight.AgentID
         };
     }
 

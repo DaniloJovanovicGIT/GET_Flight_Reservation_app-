@@ -32,12 +32,28 @@ public static class FlightsEndpoints
 
         }).WithName(GetFlightEndpointName);
 
+        //GET flights for agent
+        group.MapGet("/agent/{AgentID}", async (int AgentID, FlightSystemContext dbContext) => 
+    {
+        var agentFlights = await dbContext.Flights
+            .Include(flight => flight.DepartureCity)
+            .Include(flight => flight.ArrivalCity)
+            .Where(flight => flight.AgentID == AgentID)
+            .Select(flight => flight.toDto())
+            .AsNoTracking()
+            .ToListAsync();
+        
+        return Results.Ok(agentFlights);
+    });
+
+
         //POST /flights
         group.MapPost("/", async (CreateFlightDto newFlight, FlightSystemContext dbContext) =>
         {
             Flight flight = newFlight.ToEntitiy();
             flight.DepartureCity = dbContext.Cities.Find(flight.DepartureCityID);
             flight.ArrivalCity = dbContext.Cities.Find(flight.ArrivalCityID);
+            flight.Agent = dbContext.Users.Find(flight.AgentID);
 
             await dbContext.Flights.AddAsync(flight);
             await dbContext.SaveChangesAsync();

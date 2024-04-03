@@ -2,17 +2,21 @@ import { Button } from "@/components/ui/button";
 import useCities from "@/hooks/useCities";
 import React, { useState } from "react";
 import axios from "axios";
+import { useError } from "@/context/ErrorContext";
+import useAddFlight from "@/hooks/useAddFlight";
+import Popup from "@/components/ui/popup";
 
 function AddFlightPage() {
-  // Define state for input fields
+  const [showPopup, setShowPopup] = useState(false);
   const [departureCity, setDepartureCity] = useState("");
   const [arrivalCity, setArrivalCity] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [numberOfConnections, setNumberOfConnections] = useState(0);
   const [availableSeats, setAvailableSeats] = useState(0);
   const { cities, loading, error } = useCities();
+  const { addError } = useError();
+  const { addFlight } = useAddFlight();
 
-  // Event handlers to update state
   const handleDepartureCityChange = (event) => {
     setDepartureCity(event.target.value);
   };
@@ -33,9 +37,49 @@ function AddFlightPage() {
     setAvailableSeats(parseInt(event.target.value));
   };
 
+  const handleFlighSavedSuccesfully = () => {
+    setDepartureCity("");
+    setArrivalCity("");
+    setAvailableSeats(0);
+    setNumberOfConnections(0);
+    setDepartureDate(0);
+    setShowPopup(true);
+  }
+
+  const closePopup = () =>{
+    setShowPopup(false)
+  }
+
+  const validateForm = () => {
+    if (!departureCity) {
+      addError("Departure city is required");
+      return false;
+    }
+    if (!arrivalCity) {
+      addError("Arrival city is required");
+      return false;
+    }
+    if (!departureDate) {
+      addError("Departure date is required");
+      return false;
+    }
+    if (!availableSeats) {
+      addError("Available seats count is required");
+      return false;
+    }
+    if (availableSeats < 1) {
+      addError("Available seats must be greater than 0");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (!validateForm()) {
+      return;
+    }
     const formData = {
       DepartureCityID: departureCity,
       ArrivalCityID: arrivalCity,
@@ -43,20 +87,16 @@ function AddFlightPage() {
       numberOfConnections: numberOfConnections,
       availableSeatsCount: availableSeats,
     };
-    console.log(formData);
     try {
-      const response = await axios.post(
-        "http://localhost:5278/flights",
-        formData
-      );
-      console.log("Flight added successfully:", response.data);
+      const response = addFlight(formData);
+      handleFlighSavedSuccesfully();
     } catch (error) {
-      console.error("Error adding flight:", error);
+      addError(error.message);
     }
   };
+
   return (
     <section className="p-4">
-      <h2 className="mb-4">Add Flight</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block mb-1">Departure:</label>
@@ -65,6 +105,7 @@ function AddFlightPage() {
             onChange={handleDepartureCityChange}
             className="w-full px-3 py-2 border rounded-md"
           >
+            <option value="">Select departure city</option>
             {cities.map((city) => (
               <option key={city.id} value={city.id}>
                 {city.name}
@@ -79,6 +120,7 @@ function AddFlightPage() {
             onChange={handleArrivalCityChange}
             className="w-full px-3 py-2 border rounded-md"
           >
+            <option value="">Select arrival city</option>
             {cities.map((city) => (
               <option key={city.id} value={city.id}>
                 {city.name}
@@ -102,6 +144,7 @@ function AddFlightPage() {
             value={numberOfConnections}
             onChange={handleNumberOfConnectionsChange}
             className="w-full px-3 py-2 border rounded-md"
+            min={0}
           />
         </div>
         <div>
@@ -111,12 +154,14 @@ function AddFlightPage() {
             value={availableSeats}
             onChange={handleAvailableSeatsChange}
             className="w-full px-3 py-2 border rounded-md"
+            min={1}
           />
         </div>
         <Button type="submit" className="w-full">
           Submit
         </Button>
       </form>
+      {showPopup && <Popup onClose={closePopup()}>FLight saved successfully</Popup>}
     </section>
   );
 }

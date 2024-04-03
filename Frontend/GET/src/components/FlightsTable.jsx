@@ -1,4 +1,3 @@
-import useFlights from "@/hooks/useFlights";
 import {
   Table,
   TableBody,
@@ -8,21 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import React from "react";
 
-function FlightPage() {
-  const { flights, loading, error } = useFlights();
-
-  if (loading) {
-    return <div>Loading...</div>;
+function FlightPage({ flights }) {
+  if (!flights) {
+    return <div>No flights available</div>;
   }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  console.log(flights);
 
   return (
     <>

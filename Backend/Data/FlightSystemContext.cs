@@ -14,7 +14,6 @@ namespace Backend.Data
             : base(options)
         {
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<City>().HasData(
@@ -35,6 +34,30 @@ namespace Backend.Data
                 new { UserId = 8, Username = "visitor3", Password = "visitor3", Role = "visitor" },
                 new { UserId = 9, Username = "visitor4", Password = "visitor4", Role = "visitor" }
             );
+
+            modelBuilder.Entity<Flight>()
+                .HasOne(f => f.Agent)
+                .WithMany()
+                .HasForeignKey(f => f.AgentID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Agent)
+                .WithMany()
+                .HasForeignKey(r => r.AgentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Booker)
+                .WithMany()
+                .HasForeignKey(r => r.BookerId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Flight)
+                .WithMany()
+                .HasForeignKey(r => r.FlightId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

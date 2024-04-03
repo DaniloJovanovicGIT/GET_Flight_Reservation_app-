@@ -14,6 +14,10 @@ public class Flight
 
     public City? ArrivalCity { get; set; }
 
+    public int AgentID { get; set; }
+
+    public User? Agent { get; set; }
+
     public DateOnly DepartureDate { get; set; }
 
     public int NumberOfConnections { get; set; }

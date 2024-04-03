@@ -25,15 +25,15 @@ const useAddReservation = () => {
         console.error("Error establishing SignalR connection:", error);
       });
 
-    return () => {
-      if (newConnection) {
-        newConnection.stop().then(() => {
-          console.log("SignalR Connection Stopped");
-        }).catch((error) => {
-          console.error("Error stopping SignalR connection:", error);
-        });
-      }
-    };
+      return () => {
+        if (newConnection) {
+          newConnection.stop().then(() => {
+            console.log("SignalR Connection Stopped");
+          }).catch((error) => {
+            console.error("Error stopping SignalR connection:", error);
+          });
+        }
+      };
   }, []);
 
   const addReservation = async (flightId, numSeats) => {
