@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Backend.Entities;
@@ -104,12 +103,29 @@ public class ReservationHub : Hub
 
     if (existingReservation != null)
     {
-        existingReservation.Status = "Confirmed";
-        _context.Reservations.Update(existingReservation);
-        await _context.SaveChangesAsync();
-        await Clients.All.SendAsync("ReservationUpdated", existingReservation);
+        var flight = existingReservation.Flight;
+        if (flight.AvailableSeatsCount >= existingReservation.numOfSeats)
+        {
+            existingReservation.Status = "Confirmed";
+            _context.Reservations.Update(existingReservation);            
+            // Update the number of available seats on the flight
+            flight.AvailableSeatsCount -= existingReservation.numOfSeats;
+            _context.Flights.Update(flight);
+
+            await _context.SaveChangesAsync();
+            await Clients.All.SendAsync("ReservationUpdated", existingReservation);
+        }
+        else
+        {
+            existingReservation.Status = "Declined";
+            _context.Reservations.Update(existingReservation);
+            await _context.SaveChangesAsync();
+            // Notify the client or take appropriate action
+        }
     }
 }
 
-
 }
+
+
+

@@ -15,6 +15,8 @@ import AgentReservationsPage from "./pages/AgentReservationsPage";
 import AgentsFlights from "./pages/AgentsFlights";
 import VisitorFlightsPage from "./pages/VisitorFlightsPage";
 import VisitorReservationsPage from "./pages/VisitorReservationsPage";
+import AdminFlightsPage from "./pages/AdminFlightsPage";
+import AdminAddUserPage from "./pages/AdminAddUserPage";
 
 function App() {
   return (
@@ -24,12 +26,18 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="unathorized" element={<UnathorizedPage />} />
           <Route element={<RequireRole allowedRole="admin" />}>
-            <Route path="adminPanel" element={<AdminPanel />} />
+            <Route path="adminPanel" element={<AdminPanel />}>
+              <Route path="flights" element={<AdminFlightsPage />} />
+              <Route path="users" element={<AdminAddUserPage />} />
+            </Route>
           </Route>
           <Route element={<RequireRole allowedRole="visitor" />}>
             <Route path="visitorPanel" element={<VisitorPanel />}>
               <Route path="flights" element={<VisitorFlightsPage />} />
-              <Route path="reservations" element={<VisitorReservationsPage />} />
+              <Route
+                path="reservations"
+                element={<VisitorReservationsPage />}
+              />
             </Route>
           </Route>
           <Route element={<RequireRole allowedRole="agent" />}>
