@@ -35,6 +35,8 @@ public class ReservationHub : Hub
 
             User booker = await _context.Users.FindAsync(reservation.BookerId);
             Flight flight = await _context.Flights.FindAsync(reservation.FlightId);
+            flight.ArrivalCity = await _context.Cities.FindAsync(flight.ArrivalCityID);
+            flight.DepartureCity = await _context.Cities.FindAsync(flight.DepartureCityID);
 
             if (booker == null || flight == null)
             {
@@ -61,24 +63,27 @@ public class ReservationHub : Hub
 
     public async Task<List<Reservation>> GetReservationsForAgent(int agentId)
     {
-        var agentFlights = await _context.Flights
-            .Where(f => f.AgentID == agentId)
-            .ToListAsync();
-
-        var agentFlightIds = agentFlights.Select(f => f.FlightId).ToList();
-
         var reservationsForAgent = await _context.Reservations
-            .Where(r => agentFlightIds.Contains(r.FlightId))
+            .Include(r => r.Booker)
+            .Include(r => r.Flight)
+                .ThenInclude(f => f.DepartureCity)
+            .Include(r => r.Flight)
+                .ThenInclude(f => f.ArrivalCity)
+            .Where(r => _context.Flights.Any(f => f.AgentID == agentId && f.FlightId == r.FlightId))
             .ToListAsync();
 
         return reservationsForAgent;
     }
+
 
     public async Task<List<Reservation>> GetReservationsByUserId(int userId)
     {
         var reservations = await _context.Reservations
             .Include(r => r.Booker)
             .Include(r => r.Flight)
+                .ThenInclude(f => f.DepartureCity)
+            .Include(r => r.Flight)
+                .ThenInclude(f => f.ArrivalCity)
             .Where(r => r.BookerId == userId)
             .ToListAsync();
 
@@ -86,16 +91,25 @@ public class ReservationHub : Hub
     }
 
 
-    public async Task UpdateReservation(Reservation updatedReservation)
-    {
-        var existingReservation = await _context.Reservations.FindAsync(updatedReservation.ReservationId);
-        if (existingReservation != null)
-        {
-            existingReservation.FlightId = updatedReservation.FlightId;
 
-            _context.Reservations.Update(existingReservation);
-            await _context.SaveChangesAsync();
-            await Clients.All.SendAsync("ReservationUpdated", existingReservation);
-        }
+    public async Task ConfirmReservation(int reservationId)
+{
+    var existingReservation = await _context.Reservations
+        .Include(r => r.Flight)
+            .ThenInclude(f => f.DepartureCity)
+        .Include(r => r.Flight)
+            .ThenInclude(f => f.ArrivalCity)
+        .Include(r => r.Booker)
+        .FirstOrDefaultAsync(r => r.ReservationId == reservationId);
+
+    if (existingReservation != null)
+    {
+        existingReservation.Status = "Confirmed";
+        _context.Reservations.Update(existingReservation);
+        await _context.SaveChangesAsync();
+        await Clients.All.SendAsync("ReservationUpdated", existingReservation);
     }
+}
+
+
 }
