@@ -1,0 +1,32 @@
+.add_user{
+    display: flex;
+    justify-content: center;
+}
+
+.form{
+    max-width: 300px;
+    align-items: center;
+    align-content: center;
+}
+
+.title{
+    padding: 10px;
+}
+
+.textfeild_user{
+    margin: 4px;
+    border: 2px solid black;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    width: 300px;
+}
+
+.role{
+    margin: 10px 0px;
+}

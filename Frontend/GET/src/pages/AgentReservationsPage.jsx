@@ -18,7 +18,7 @@ const AgentReservationPage = () => {
   const { token, userId } = authState;
   const { confirmReservation } = useConfirmReservation();
 
-  
+
 
   useEffect(() => {
     const connection = new HubConnectionBuilder()
@@ -80,7 +80,7 @@ const AgentReservationPage = () => {
             <TableHead className="text-center">Flight</TableHead>
             <TableHead className="text-center">Date</TableHead>
             <TableHead className="text-center">Number of seats</TableHead>
-            <TableHead className="text-center">Time submitted</TableHead>
+            <TableHead className="text-center">User</TableHead>
             <TableHead className="text-center">Status</TableHead>
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
@@ -95,7 +95,7 @@ const AgentReservationPage = () => {
               </TableCell>
               <TableCell>{reservation.flight.departureDate}</TableCell>
               <TableCell>{reservation.numOfSeats}</TableCell>
-              <TableCell>{reservation.timeSubmited}</TableCell>
+              <TableCell>{reservation.booker.username}</TableCell>
               <TableCell>{reservation.status}</TableCell>
               <TableCell>
                 {reservation.status === "pending" && (

@@ -1,28 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import FlightsTableUser from "@/components/FlightsTableUser";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import VisitorReservationsPage from "./VisitorReservationsPage";
-import VisitorFlightsPage from "./VisitorFlightsPage";
+import "./VisitorPanel.css";
 
 function VisitorPanel() {
   const navigate = useNavigate();
+  const [selectedPage, setSelectedPage] = useState(() => {
+    return localStorage.getItem("selectedPage") || "flights";
+  });
 
-  const navigateToSearchFlights = () => {
-    navigate("/visitorPanel/flights");
-  };
+  useEffect(() => {
+    localStorage.setItem("selectedPage", selectedPage);
+  }, [selectedPage]);
 
-  const navigateToReservations = () => {
-    navigate("/visitorPanel/reservations");
+  const navigateTo = (page) => {
+    navigate(`/visitorPanel/${page}`);
+    setSelectedPage(page);
   };
 
   return (
     <>
       <Navigation>
-        <Button onClick={navigateToSearchFlights}>Search flighs</Button>
-        <Button onClick={navigateToReservations}>My reservations</Button>
+        <button onClick={() => navigateTo("flights")} className={selectedPage === "flights" ? "selected" : "button"}>
+          Search flights
+        </button>
+        <button onClick={() => navigateTo("reservations")} className={selectedPage === "reservations" ? "selected" : "button"}>
+          My reservations
+        </button>
       </Navigation>
 
       <Outlet>

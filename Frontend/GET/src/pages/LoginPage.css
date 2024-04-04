@@ -1,0 +1,25 @@
+.login-form{
+    display: flex;
+    justify-content: center;
+}
+.inputs{
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+.input{
+    padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.textfeild{
+    padding: 2px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+.textfeild:focus{
+    border-color: red;
+}

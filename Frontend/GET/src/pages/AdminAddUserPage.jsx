@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useInfo } from "@/context/InfoContext";
+import "./AdminAddUserPage.css";
 
 function AdminAddUserPage() {
   const [username, setUsername] = useState("");
@@ -63,37 +64,45 @@ function AdminAddUserPage() {
   };
 
   return (
-    <div>
-      <h2>Add New User</h2>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={handleUsernameChange}
-        />
+    <div className="add_user">
+      <div className="form">
+        <h2 className="title">Add New User</h2>
+        <div className="input">
+          <label htmlFor="username">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={handleUsernameChange}
+            className="textfeild_user"
+          />
+        </div>
+        <div className="input">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="text"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+            className="textfeild_user"
+          />
+        </div>
+        <div className="role">
+          <label htmlFor="userType">User Type:</label>
+          <select
+            id="userType"
+            value={userType}
+            onChange={handleUserTypeChange}
+          >
+            <option value="visitor">Visitor</option>
+            <option value="agent">Agent</option>
+          </select>
+        </div>
+        <Button onClick={handleSubmit} disabled={loading}>
+          {loading ? "Adding User..." : "Add User"}
+        </Button>
+        <p>{message}</p>
       </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="userType">User Type:</label>
-        <select id="userType" value={userType} onChange={handleUserTypeChange}>
-          <option value="visitor">Visitor</option>
-          <option value="agent">Agent</option>
-        </select>
-      </div>
-      <Button onClick={handleSubmit} disabled={loading}>
-        {loading ? "Adding User..." : "Add User"}
-      </Button>
-      <p>{message}</p>
     </div>
   );
 }
