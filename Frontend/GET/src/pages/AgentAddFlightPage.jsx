@@ -5,6 +5,7 @@ import axios from "axios";
 import { useError } from "@/context/ErrorContext";
 import useAddFlight from "@/hooks/useAddFlight";
 import Popup from "@/components/ui/popup";
+import { useInfo } from "@/context/InfoContext";
 
 function AddFlightPage() {
   const [showPopup, setShowPopup] = useState(false);
@@ -15,6 +16,7 @@ function AddFlightPage() {
   const [availableSeats, setAvailableSeats] = useState(0);
   const { cities, loading, error } = useCities();
   const { addError } = useError();
+  const { addInfo } = useInfo();
   const { addFlight } = useAddFlight();
 
   const handleDepartureCityChange = (event) => {
@@ -38,6 +40,7 @@ function AddFlightPage() {
   };
 
   const handleFlighSavedSuccesfully = () => {
+    addInfo("Flight saved successfully");
     setDepartureCity("");
     setArrivalCity("");
     setAvailableSeats(0);

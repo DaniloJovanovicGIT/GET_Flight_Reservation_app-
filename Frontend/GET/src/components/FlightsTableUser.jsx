@@ -12,11 +12,13 @@ import React, { useState } from "react";
 import Popup from "./ui/popup";
 import { useError } from "@/context/ErrorContext";
 import useAddReservation from "@/hooks/useAddReservation";
+import { useInfo } from "@/context/InfoContext";
 
 function FlightsTableUser({ flights }) {
   const [numSeats, setNumSeats] = useState(1);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const { addError } = useError();
+  const { addInfo } = useInfo();
   const { addReservation } = useAddReservation();
 
   const handleFlightSelection = (flight) => {

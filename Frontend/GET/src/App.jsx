@@ -17,6 +17,7 @@ import VisitorFlightsPage from "./pages/VisitorFlightsPage";
 import VisitorReservationsPage from "./pages/VisitorReservationsPage";
 import AdminFlightsPage from "./pages/AdminFlightsPage";
 import AdminAddUserPage from "./pages/AdminAddUserPage";
+import InfoPopup from "./components/InfoPopup";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
         </Route>
       </Routes>
       {<ErrorPopup />}
+      {<InfoPopup />}
     </>
   );
 }

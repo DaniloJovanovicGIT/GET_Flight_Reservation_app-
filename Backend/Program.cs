@@ -54,7 +54,7 @@ app.MapHub<ReservationHub>("/reservationhub");
 app.MapAuthEndpoints();
 app.MapFlightsEndpoints().RequireAuthorization();
 app.MapCitiesEndpoints().RequireAuthorization();
-app.MapUserEndpoints().RequireAuthorization();
+app.MapUsersEndpoints().RequireAuthorization();
 //OSVEZI BAZU
 await app.MigrateDbAsync();
 //POKRENI

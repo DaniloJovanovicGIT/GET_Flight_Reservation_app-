@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import * as signalR from "@microsoft/signalr";
 import { useError } from "@/context/ErrorContext";
 import { useAuth } from "@/context/AuthContext";
+import { useInfo } from "@/context/InfoContext";
 
 const useConfirmReservation = () => {
   const [errorText, setErrorText] = useState("");
   const { addError } = useError();
   const { authState } = useAuth();
+  const { addInfo } = useInfo();
   const [connection, setConnection] = useState(null);
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const useConfirmReservation = () => {
 
       await connection.invoke("ConfirmReservation", reservationId);
 
-      console.log("Reservation confirmed successfully");
+      addInfo("Reservation confirmed successfully");
       setErrorText("");
     } catch (error) {
       addError(error.message);

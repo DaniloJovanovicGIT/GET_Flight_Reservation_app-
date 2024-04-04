@@ -55,3 +55,14 @@ Content-Type: application/json
     "Username": "admin",
     "Password": "admin"
   }
+
+  ###
+  POST http://localhost:5278/users
+Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzEyMTgxNTQxLCJleHAiOjE3MTIxODUxNDEsImlhdCI6MTcxMjE4MTU0MSwiaXNzIjoiZG90bmV0LXVzZXItand0cyJ9.fdq4kFcgV6WQG5lK_xRgUd7uEZQitI85G8L56GGlpEY"
+Content-Type: application/json
+
+{
+    "Username": "visitor9",
+    "Password":"visitor9",
+    "Role": "visitor",
+  }

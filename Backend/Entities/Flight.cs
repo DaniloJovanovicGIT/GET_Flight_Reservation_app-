@@ -23,4 +23,6 @@ public class Flight
     public int NumberOfConnections { get; set; }
 
     public int AvailableSeatsCount { get; set; }
+
+    public String? Status { get; set; }
 }

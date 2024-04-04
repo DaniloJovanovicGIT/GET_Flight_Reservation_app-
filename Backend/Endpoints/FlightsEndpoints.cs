@@ -16,6 +16,7 @@ public static class FlightsEndpoints
         group.MapGet("/", async (FlightSystemContext dbContext) => await dbContext.Flights
             .Include(flight => flight.DepartureCity)
             .Include(flight => flight.ArrivalCity)
+            .Where(flight => flight.Status == null)
             .Select(flight => flight.toDto())
             .AsNoTracking()
             .ToListAsync());
@@ -40,6 +41,7 @@ public static class FlightsEndpoints
                 .Include(flight => flight.DepartureCity)
                 .Include(flight => flight.ArrivalCity)
                 .Where(flight => flight.AgentID == AgentID)
+                .Where(flight => flight.Status == null)
                 .Select(flight => flight.toDto())
                 .AsNoTracking()
                 .ToListAsync();
@@ -49,29 +51,29 @@ public static class FlightsEndpoints
 
         // GET /flights/search/{departureCityId}/{arrivalCityId}/{directFlightsOnly}
         group.MapGet("/search/{departureCityId}/{arrivalCityId}/{directFlightsOnly:int?}", async (FlightSystemContext dbContext, int? departureCityId, int? arrivalCityId, int? directFlightsOnly) =>
-        {
-            IQueryable<Flight> FlightsQuery = dbContext.Flights
-                .Include(flight => flight.DepartureCity)
-                .Include(flight => flight.ArrivalCity);
+{
+    IQueryable<Flight> FlightsQuery = dbContext.Flights
+        .Include(flight => flight.DepartureCity)
+        .Include(flight => flight.ArrivalCity)
+        .Where(flight => flight.Status == null && flight.AvailableSeatsCount > 0);
+    if (departureCityId.HasValue)
+    {
+        FlightsQuery = FlightsQuery.Where(flight => flight.DepartureCityID == departureCityId.Value);
+    }
 
-            if (departureCityId.HasValue)
-            {
-                FlightsQuery = FlightsQuery.Where(flight => flight.DepartureCityID == departureCityId.Value);
-            }
+    if (arrivalCityId.HasValue)
+    {
+        FlightsQuery = FlightsQuery.Where(flight => flight.ArrivalCityID == arrivalCityId.Value);
+    }
 
-            if (arrivalCityId.HasValue)
-            {
-                FlightsQuery = FlightsQuery.Where(flight => flight.ArrivalCityID == arrivalCityId.Value);
-            }
+    if (directFlightsOnly.HasValue && directFlightsOnly == 1)
+    {
+        FlightsQuery = FlightsQuery.Where(flight => flight.NumberOfConnections == 0);
+    }
 
-            if (directFlightsOnly.HasValue && directFlightsOnly == 1)
-            {
-                FlightsQuery = FlightsQuery.Where(flight => flight.NumberOfConnections == 0);
-            }
-
-            var flights = await FlightsQuery.ToListAsync();
-            return Results.Ok(flights);
-        });
+    var flights = await FlightsQuery.ToListAsync();
+    return Results.Ok(flights);
+});
 
         //POST /flights
         group.MapPost("/", async (CreateFlightDto newFlight, FlightSystemContext dbContext) =>
@@ -99,17 +101,33 @@ public static class FlightsEndpoints
             return Results.NoContent();
         });
 
-        //DELETE /flights
+        // DELETE /flights
         group.MapDelete("/{id}", async (int id, FlightSystemContext dbContext) =>
         {
-            await dbContext.Flights
-                .Where(flight => flight.FlightId == id)
-                .ExecuteDeleteAsync();
+            var flightToUpdate = await dbContext.Flights.FindAsync(id);
+            if (flightToUpdate == null)
+            {
+                return Results.NotFound();
+            }
+
+            var reservationsToUpdate = await dbContext.Reservations
+                .Where(r => r.FlightId == id)
+                .ToListAsync();
+
+            foreach (var reservation in reservationsToUpdate)
+            {
+                reservation.Status = "Canceled";
+                dbContext.Reservations.Update(reservation);
+            }
+
+            flightToUpdate.Status = "Canceled";
+            dbContext.Flights.Update(flightToUpdate);
 
             await dbContext.SaveChangesAsync();
 
             return Results.NoContent();
         });
+
 
         return group;
     }

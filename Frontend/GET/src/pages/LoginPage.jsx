@@ -3,11 +3,15 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useInfo } from "@/context/InfoContext";
+import { useError } from "@/context/ErrorContext";
 
 function LoginPage() {
   const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { addInfo } = useInfo();
+  const { addError } = useError();
 
   const navigate = useNavigate();
 
@@ -23,12 +27,12 @@ function LoginPage() {
       );
       handleLoginResponse(response, login);
     } catch (error) {
-      console.error("Error during login:", error);
+      addError("Error during login: User not found");
     }
   };
 
   const handleLoginResponse = (response, login) => {
-    console.log(response.data)
+    addInfo("Login successfull")
     const { token, userId, username, role } = response.data; 
     login(token, userId, username, role); 
     navigate(`${role}Panel`)
